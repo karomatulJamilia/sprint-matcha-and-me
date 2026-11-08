@@ -1,8 +1,10 @@
-name: Send GitHub Project Update to Discord
+name: Send GitHub Update to Discord
 
 on:
-  projects_v2_item:
-    types: [created, edited, deleted]
+  issues:
+    types: [opened, edited, closed, reopened]
+  pull_request:
+    types: [opened, closed, reopened]
 
 jobs:
   notify_discord:
@@ -12,5 +14,5 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          PAYLOAD='{"content": "🔔 **Pembaruan GitHub Project:** Ada perubahan status atau task pada papan proyek Anda."}'
+          PAYLOAD='{"content": "🔔 **Pemberitahuan Repository Matcha and Me:** Ada *Issue* atau *Pull Request* baru yang diperbarui atau ditutup!"}'
           curl -H "Content-Type: application/json" -X POST -d "$PAYLOAD" "$DISCORD_WEBHOOK_URL"
